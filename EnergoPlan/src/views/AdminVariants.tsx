@@ -29,7 +29,7 @@ export const AdminVariants: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <View>
+        <View style={{ flex: 1, minWidth: 260 }}>
           <Text style={styles.title}>Porównanie wariantów przydziału sal</Text>
           <Text style={styles.subtitle}>
             Model optymalizacji energetycznej Future Smart City 2026 • Analiza i zatwierdzenie
@@ -365,6 +365,9 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 13,
     color: Theme.colors.forest,
+    flex: 1,
+    flexShrink: 1,
+    lineHeight: 18,
   },
   sectionCard: {
     backgroundColor: Theme.colors.surface,
@@ -400,7 +403,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   allocMain: {
-    width: 220,
+    flex: 1,
+    minWidth: 160,
   },
   allocSubject: {
     fontSize: 15,
@@ -514,7 +518,9 @@ const styles = StyleSheet.create({
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: 12,
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 14,
   },
 });
 

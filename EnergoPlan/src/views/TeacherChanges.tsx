@@ -161,11 +161,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 14,
+    flexWrap: 'wrap',
+    gap: 8,
   },
   subjectText: {
     fontSize: 18,
     fontWeight: '800',
     color: Theme.colors.text,
+    flexShrink: 1,
   },
   dateMeta: {
     fontSize: 12,
@@ -190,12 +193,15 @@ const styles = StyleSheet.create({
     borderRadius: Theme.radii.lg,
     padding: 14,
     marginBottom: 14,
+    flexWrap: 'wrap',
+    gap: 8,
   },
   roomCol: {
     flex: 1,
+    minWidth: 100,
   },
   roomNewCol: {
-    paddingLeft: 10,
+    paddingLeft: 6,
   },
   roomColLabel: {
     fontSize: 11,
@@ -266,12 +272,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#EAF6EF',
     padding: 12,
     borderRadius: Theme.radii.md,
+    flexWrap: 'wrap',
   },
   acknowledgedText: {
     fontSize: 12,
     color: '#0F5132',
     fontWeight: '700',
     flex: 1,
+    flexShrink: 1,
+    minWidth: 160,
   },
   emptyState: {
     backgroundColor: '#FFFFFF',

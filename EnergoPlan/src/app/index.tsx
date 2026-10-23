@@ -394,7 +394,10 @@ export default function MainScreen() {
     return (
       <SafeAreaView style={styles.desktopRoot} edges={['top', 'bottom']}>
         {renderDesktopControlBar()}
-        <View style={styles.mobileFrameContainer}>
+        <ScrollView
+          style={{ flex: 1, backgroundColor: '#E5E8E2' }}
+          contentContainerStyle={styles.mobileFrameContainer}
+        >
           <View style={styles.phoneMockup}>
             {/* Głośnik i notch smartfona */}
             <View style={styles.phoneSpeaker} />
@@ -403,7 +406,7 @@ export default function MainScreen() {
               {renderMobileBottomNav()}
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -543,19 +546,23 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.background,
   },
   desktopControlBar: {
-    height: 48,
+    minHeight: 48,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: Theme.colors.border,
     paddingHorizontal: 20,
+    paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: 8,
     zIndex: 10,
   },
   controlBarLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: 12,
   },
   controlBarLabel: {
@@ -766,7 +773,7 @@ const styles = StyleSheet.create({
 
   // Ramka smartfona na desktopie
   mobileFrameContainer: {
-    flex: 1,
+    minHeight: '100%',
     backgroundColor: '#E5E8E2',
     justifyContent: 'center',
     alignItems: 'center',

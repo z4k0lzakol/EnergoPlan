@@ -458,7 +458,11 @@ interface AppContextType {
   rejectRequest: (requestId: string, reason: string) => void;
   acknowledgeChangeNotice: (noticeId: string) => void;
   updateZoneParams: (zoneId: string, powerKw: number, bufferMinutes: number) => void;
-  addRoom: (room: Omit<Room, 'id'>) => void;
+  addZone: (zone: Omit<EnergyZone, 'id'>) => void;
+  deleteZone: (zoneId: string) => void;
+  addRoom: (room: Omit<Room, 'id'> & { id?: string }) => void;
+  updateRoom: (roomId: string, updatedData: Partial<Room>) => void;
+  deleteRoom: (roomId: string) => void;
   resetToDemoData: () => void;
 }
 
@@ -681,12 +685,41 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     );
   };
 
-  const addRoom = (newRoomData: Omit<Room, 'id'>) => {
+  const addZone = (newZoneData: Omit<EnergyZone, 'id'>) => {
+    const nextChar = String.fromCharCode(65 + zones.length);
+    const newZone: EnergyZone = {
+      ...newZoneData,
+      id: `zone-${nextChar}`,
+    };
+    setZones((prev) => [...prev, newZone]);
+  };
+
+  const deleteZone = (zoneId: string) => {
+    setZones((prev) => prev.filter((z) => z.id !== zoneId));
+    const fallbackZoneId = zones.find((z) => z.id !== zoneId)?.id || 'zone-A';
+    setRooms((prev) =>
+      prev.map((r) => (r.zoneId === zoneId ? { ...r, zoneId: fallbackZoneId } : r))
+    );
+  };
+
+  const addRoom = (newRoomData: Omit<Room, 'id'> & { id?: string }) => {
+    const defaultPrefix = newRoomData.floor === 'Parter' ? 'A' : newRoomData.floor === 'I Piętro' ? 'B' : 'C';
+    const defaultId = `${defaultPrefix}${Math.floor(100 + Math.random() * 899)}`;
     const newRoom: Room = {
       ...newRoomData,
-      id: `${newRoomData.floor === 'Parter' ? 'A' : newRoomData.floor === 'I Piętro' ? 'B' : 'C'}${Math.floor(100 + Math.random() * 899)}`,
+      id: newRoomData.id?.trim() || defaultId,
     };
     setRooms((prev) => [...prev, newRoom]);
+  };
+
+  const deleteRoom = (roomId: string) => {
+    setRooms((prev) => prev.filter((r) => r.id !== roomId));
+  };
+
+  const updateRoom = (roomId: string, updatedData: Partial<Room>) => {
+    setRooms((prev) =>
+      prev.map((r) => (r.id === roomId ? { ...r, ...updatedData } : r))
+    );
   };
 
   const resetToDemoData = () => {
@@ -726,7 +759,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         rejectRequest,
         acknowledgeChangeNotice,
         updateZoneParams,
+        addZone,
+        deleteZone,
         addRoom,
+        updateRoom,
+        deleteRoom,
         resetToDemoData,
       }}
     >
@@ -759,7 +796,8 @@ export const PrimaryButton: React.FC<{
   loading?: boolean;
   disabled?: boolean;
   variant?: 'forest' | 'green' | 'danger';
-}> = ({ title, onPress, icon, loading = false, disabled = false, variant = 'forest' }) => {
+  style?: any;
+}> = ({ title, onPress, icon, loading = false, disabled = false, variant = 'forest', style }) => {
   const bgColor =
     variant === 'green'
       ? Theme.colors.green
@@ -774,6 +812,7 @@ export const PrimaryButton: React.FC<{
       style={({ pressed }) => [
         compStyles.primaryButton,
         { backgroundColor: bgColor, opacity: disabled ? 0.6 : pressed ? 0.88 : 1 },
+        style,
       ]}
     >
       {loading ? (
@@ -781,7 +820,9 @@ export const PrimaryButton: React.FC<{
       ) : (
         <View style={compStyles.buttonContent}>
           {icon && <Icon name={icon} size={18} color="#FFFFFF" />}
-          <Text style={compStyles.primaryButtonText}>{title}</Text>
+          <Text style={compStyles.primaryButtonText} numberOfLines={2}>
+            {title}
+          </Text>
         </View>
       )}
     </Pressable>
@@ -793,7 +834,8 @@ export const SecondaryButton: React.FC<{
   onPress: () => void;
   icon?: string;
   disabled?: boolean;
-}> = ({ title, onPress, icon, disabled = false }) => {
+  style?: any;
+}> = ({ title, onPress, icon, disabled = false, style }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -801,11 +843,14 @@ export const SecondaryButton: React.FC<{
       style={({ pressed }) => [
         compStyles.secondaryButton,
         { opacity: disabled ? 0.5 : pressed ? 0.8 : 1 },
+        style,
       ]}
     >
       <View style={compStyles.buttonContent}>
         {icon && <Icon name={icon} size={16} color={Theme.colors.forest} />}
-        <Text style={compStyles.secondaryButtonText}>{title}</Text>
+        <Text style={compStyles.secondaryButtonText} numberOfLines={2}>
+          {title}
+        </Text>
       </View>
     </Pressable>
   );
@@ -891,9 +936,10 @@ export const MetricCard: React.FC<{
 
 const compStyles = StyleSheet.create({
   primaryButton: {
-    height: 48,
+    minHeight: 46,
     borderRadius: Theme.radii.md,
-    paddingHorizontal: Theme.spacing.lg,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -901,17 +947,22 @@ const compStyles = StyleSheet.create({
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    flexShrink: 1,
   },
   primaryButtonText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
+    textAlign: 'center',
+    flexShrink: 1,
   },
   secondaryButton: {
-    height: 44,
+    minHeight: 44,
     borderRadius: Theme.radii.md,
-    paddingHorizontal: Theme.spacing.lg,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
@@ -922,6 +973,8 @@ const compStyles = StyleSheet.create({
     color: Theme.colors.text,
     fontSize: 14,
     fontWeight: '600',
+    textAlign: 'center',
+    flexShrink: 1,
   },
   badge: {
     paddingHorizontal: 10,
@@ -935,7 +988,7 @@ const compStyles = StyleSheet.create({
   },
   metricCard: {
     flex: 1,
-    minWidth: 200,
+    minWidth: 180,
     backgroundColor: Theme.colors.surface,
     padding: Theme.spacing.lg,
     borderRadius: Theme.radii.lg,

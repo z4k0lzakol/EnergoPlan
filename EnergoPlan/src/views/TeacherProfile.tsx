@@ -46,28 +46,38 @@ export const TeacherProfile: React.FC = () => {
             onPress={() => setRole('teacher')}
             style={[styles.roleBtn, role === 'teacher' && styles.roleBtnActive]}
           >
-            <Icon
-              name="person-outline"
-              size={18}
-              color={role === 'teacher' ? '#FFFFFF' : Theme.colors.forest}
-            />
-            <Text style={[styles.roleBtnText, role === 'teacher' && styles.roleBtnTextActive]}>
-              Nauczyciel (Aplikacja)
-            </Text>
+            <View style={styles.roleBtnLeft}>
+              <Icon
+                name="person-outline"
+                size={18}
+                color={role === 'teacher' ? '#FFFFFF' : Theme.colors.forest}
+              />
+              <Text style={[styles.roleBtnText, role === 'teacher' && styles.roleBtnTextActive]}>
+                Nauczyciel (Aplikacja mobilna)
+              </Text>
+            </View>
+            {role === 'teacher' && (
+              <Icon name="checkmark-circle" size={18} color={Theme.colors.lime} />
+            )}
           </Pressable>
 
           <Pressable
             onPress={() => setRole('admin')}
             style={[styles.roleBtn, role === 'admin' && styles.roleBtnActive]}
           >
-            <Icon
-              name="grid-outline"
-              size={18}
-              color={role === 'admin' ? '#FFFFFF' : Theme.colors.forest}
-            />
-            <Text style={[styles.roleBtnText, role === 'admin' && styles.roleBtnTextActive]}>
-              Administrator (Panel)
-            </Text>
+            <View style={styles.roleBtnLeft}>
+              <Icon
+                name="laptop-outline"
+                size={18}
+                color={role === 'admin' ? '#FFFFFF' : Theme.colors.forest}
+              />
+              <Text style={[styles.roleBtnText, role === 'admin' && styles.roleBtnTextActive]}>
+                Administrator (Panel webowy)
+              </Text>
+            </View>
+            {role === 'admin' && (
+              <Icon name="checkmark-circle" size={18} color={Theme.colors.lime} />
+            )}
           </Pressable>
         </View>
       </View>
@@ -196,21 +206,29 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   roleToggleRow: {
-    flexDirection: 'row',
-    gap: 12,
+    flexDirection: 'column',
+    gap: 10,
     marginTop: 14,
+    width: '100%',
   },
   roleBtn: {
-    flex: 1,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 12,
+    justifyContent: 'space-between',
+    paddingVertical: 13,
+    paddingHorizontal: 16,
     borderRadius: Theme.radii.md,
     borderWidth: 1.5,
     borderColor: Theme.colors.border,
     backgroundColor: '#FAFCFA',
+  },
+  roleBtnLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+    flexShrink: 1,
   },
   roleBtnActive: {
     backgroundColor: Theme.colors.forest,
@@ -220,6 +238,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: Theme.colors.text,
+    flexShrink: 1,
   },
   roleBtnTextActive: {
     color: '#FFFFFF',
@@ -236,15 +255,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
   },
   infoLabel: {
     fontSize: 12,
     color: Theme.colors.muted,
+    flexShrink: 1,
   },
   infoVal: {
     fontSize: 12,
     fontWeight: '700',
     color: Theme.colors.text,
+    flexShrink: 1,
   },
 });
 

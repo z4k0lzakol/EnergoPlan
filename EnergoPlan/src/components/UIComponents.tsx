@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
 import { Theme } from '../constants/theme';
 import { Icon } from './Icons';
 import { RequestStatus } from '../types';
@@ -11,7 +11,8 @@ export const PrimaryButton: React.FC<{
   loading?: boolean;
   disabled?: boolean;
   variant?: 'forest' | 'green' | 'danger';
-}> = ({ title, onPress, icon, loading = false, disabled = false, variant = 'forest' }) => {
+  style?: StyleProp<ViewStyle>;
+}> = ({ title, onPress, icon, loading = false, disabled = false, variant = 'forest', style }) => {
   const bgColor =
     variant === 'green'
       ? Theme.colors.green
@@ -26,6 +27,7 @@ export const PrimaryButton: React.FC<{
       style={({ pressed }) => [
         styles.primaryButton,
         { backgroundColor: bgColor, opacity: disabled ? 0.6 : pressed ? 0.88 : 1 },
+        style,
       ]}
     >
       {loading ? (
@@ -33,7 +35,9 @@ export const PrimaryButton: React.FC<{
       ) : (
         <View style={styles.buttonContent}>
           {icon && <Icon name={icon} size={18} color="#FFFFFF" />}
-          <Text style={styles.primaryButtonText}>{title}</Text>
+          <Text style={styles.primaryButtonText} numberOfLines={2}>
+            {title}
+          </Text>
         </View>
       )}
     </Pressable>
@@ -45,7 +49,8 @@ export const SecondaryButton: React.FC<{
   onPress: () => void;
   icon?: any;
   disabled?: boolean;
-}> = ({ title, onPress, icon, disabled = false }) => {
+  style?: StyleProp<ViewStyle>;
+}> = ({ title, onPress, icon, disabled = false, style }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -53,11 +58,14 @@ export const SecondaryButton: React.FC<{
       style={({ pressed }) => [
         styles.secondaryButton,
         { opacity: disabled ? 0.5 : pressed ? 0.8 : 1 },
+        style,
       ]}
     >
       <View style={styles.buttonContent}>
         {icon && <Icon name={icon} size={16} color={Theme.colors.forest} />}
-        <Text style={styles.secondaryButtonText}>{title}</Text>
+        <Text style={styles.secondaryButtonText} numberOfLines={2}>
+          {title}
+        </Text>
       </View>
     </Pressable>
   );
@@ -175,9 +183,10 @@ export const RoomChip: React.FC<{
 
 const styles = StyleSheet.create({
   primaryButton: {
-    height: 48,
+    minHeight: 46,
     borderRadius: Theme.radii.md,
-    paddingHorizontal: Theme.spacing.lg,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -185,17 +194,22 @@ const styles = StyleSheet.create({
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    flexShrink: 1,
   },
   primaryButtonText: {
     color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
+    textAlign: 'center',
+    flexShrink: 1,
   },
   secondaryButton: {
-    height: 44,
+    minHeight: 44,
     borderRadius: Theme.radii.md,
-    paddingHorizontal: Theme.spacing.lg,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
@@ -206,6 +220,8 @@ const styles = StyleSheet.create({
     color: Theme.colors.text,
     fontSize: 14,
     fontWeight: '600',
+    textAlign: 'center',
+    flexShrink: 1,
   },
   badge: {
     paddingHorizontal: 10,
@@ -219,7 +235,7 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     flex: 1,
-    minWidth: 200,
+    minWidth: 180,
     backgroundColor: Theme.colors.surface,
     padding: Theme.spacing.lg,
     borderRadius: Theme.radii.lg,

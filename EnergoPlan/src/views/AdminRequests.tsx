@@ -89,7 +89,7 @@ export const AdminRequests: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <View>
+        <View style={{ flex: 1, minWidth: 260 }}>
           <Text style={styles.title}>Wnioski nauczycieli o przydział sal</Text>
           <Text style={styles.subtitle}>
             Zgłoszenia zajęć pozalekcyjnych, weryfikacja kryteriów technicznych i przydział
@@ -195,11 +195,13 @@ export const AdminRequests: React.FC = () => {
                 <View style={styles.actionRow}>
                   <SecondaryButton
                     title="Odrzuć wniosek"
+                    style={styles.actionBtnSecondary}
                     onPress={() => handleOpenReject(req)}
                   />
                   <PrimaryButton
                     title="Sprawdź i przydziel salę"
                     icon="checkmark"
+                    style={styles.actionBtnPrimary}
                     onPress={() => handleOpenAssign(req)}
                   />
                 </View>
@@ -353,6 +355,8 @@ const styles = StyleSheet.create({
   },
   filterTabs: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
     backgroundColor: Theme.colors.surface,
     padding: 4,
     borderRadius: Theme.radii.md,
@@ -485,8 +489,21 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: 12,
-    marginTop: 8,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 14,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: Theme.colors.borderLight,
+  },
+  actionBtnSecondary: {
+    flexGrow: 1,
+    minWidth: 130,
+  },
+  actionBtnPrimary: {
+    flexGrow: 1,
+    minWidth: 180,
   },
   emptyCard: {
     backgroundColor: Theme.colors.surface,
@@ -558,6 +575,7 @@ const styles = StyleSheet.create({
     borderRadius: Theme.radii.md,
     borderWidth: 1,
     borderColor: Theme.colors.borderLight,
+    flexWrap: 'wrap',
     gap: 10,
   },
   roomCheckRowDisabled: {
@@ -621,7 +639,9 @@ const styles = StyleSheet.create({
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: 12,
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 16,
   },
 });
 

@@ -29,7 +29,7 @@ export const AdminReport: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <View>
+        <View style={{ flex: 1, minWidth: 260 }}>
           <Text style={styles.title}>Raport efektywności energetycznej</Text>
           <Text style={styles.subtitle}>
             {school.name} • Raport pilotażu modelu Future Smart City 2026 ({publishedVersion})
@@ -59,7 +59,7 @@ export const AdminReport: React.FC = () => {
           zweryfikowana oszczędność z faktury.
         </Text>
         <View style={styles.meterStatusBadge}>
-          <Icon name="hardware-chip-outline" size={14} color="#8A5A16" />
+          <Icon name="hardware-chip-outline" size={16} color="#8A5A16" />
           <Text style={styles.meterStatusText}>
             Status odczytu liczników: Brak pomiaru fizycznego (symulacja wzorcowa)
           </Text>
@@ -98,78 +98,82 @@ export const AdminReport: React.FC = () => {
           Kalkulacja oparta na czasie trwania zajęć, buforze 30 min oraz mocy urządzeń
         </Text>
 
-        <View style={styles.tableHeader}>
-          <Text style={[styles.th, { flex: 1.5 }]}>Strefa energetyczna</Text>
-          <Text style={[styles.th, { width: 80 }]}>Moc (kW)</Text>
-          <Text style={[styles.th, { width: 90 }]}>Czas bazowy</Text>
-          <Text style={[styles.th, { width: 90 }]}>Czas wariant</Text>
-          <Text style={[styles.th, { width: 100 }]}>Energia bazowa</Text>
-          <Text style={[styles.th, { width: 100 }]}>Energia wariant</Text>
-          <Text style={[styles.th, { width: 90 }]}>Oszczędność</Text>
-        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ minWidth: 680 }}>
+          <View style={{ flex: 1 }}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.th, { flex: 1.5 }]}>Strefa energetyczna</Text>
+              <Text style={[styles.th, { width: 80 }]}>Moc (kW)</Text>
+              <Text style={[styles.th, { width: 90 }]}>Czas bazowy</Text>
+              <Text style={[styles.th, { width: 90 }]}>Czas wariant</Text>
+              <Text style={[styles.th, { width: 100 }]}>Energia bazowa</Text>
+              <Text style={[styles.th, { width: 100 }]}>Energia wariant</Text>
+              <Text style={[styles.th, { width: 90 }]}>Oszczędność</Text>
+            </View>
 
-        {energySummary.zoneCalculations.map((z) => (
-          <View key={z.zoneId} style={styles.tableRow}>
-            <View style={[styles.td, { flex: 1.5 }]}>
-              <Text style={styles.zoneNameText}>{z.zoneName}</Text>
-            </View>
-            <View style={[styles.td, { width: 80 }]}>
-              <Text style={styles.tdText}>{z.powerKw} kW</Text>
-            </View>
-            <View style={[styles.td, { width: 90 }]}>
-              <Text style={styles.tdText}>{z.baselineHours} h</Text>
-            </View>
-            <View style={[styles.td, { width: 90 }]}>
-              <Text style={[styles.tdText, { fontWeight: '700', color: Theme.colors.green }]}>
-                {z.variantHours} h
-              </Text>
-            </View>
-            <View style={[styles.td, { width: 100 }]}>
-              <Text style={styles.tdText}>{z.baselineKWh} kWh</Text>
-            </View>
-            <View style={[styles.td, { width: 100 }]}>
-              <Text style={[styles.tdText, { fontWeight: '700', color: Theme.colors.green }]}>
-                {z.variantKWh} kWh
-              </Text>
-            </View>
-            <View style={[styles.td, { width: 90 }]}>
-              <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.forest }]}>
-                {z.savedKWh > 0 ? `-${z.savedKWh} kWh` : '0 kWh'}
-              </Text>
-            </View>
-          </View>
-        ))}
+            {energySummary.zoneCalculations.map((z) => (
+              <View key={z.zoneId} style={styles.tableRow}>
+                <View style={[styles.td, { flex: 1.5 }]}>
+                  <Text style={styles.zoneNameText}>{z.zoneName}</Text>
+                </View>
+                <View style={[styles.td, { width: 80 }]}>
+                  <Text style={styles.tdText}>{z.powerKw} kW</Text>
+                </View>
+                <View style={[styles.td, { width: 90 }]}>
+                  <Text style={styles.tdText}>{z.baselineHours} h</Text>
+                </View>
+                <View style={[styles.td, { width: 90 }]}>
+                  <Text style={[styles.tdText, { fontWeight: '700', color: Theme.colors.green }]}>
+                    {z.variantHours} h
+                  </Text>
+                </View>
+                <View style={[styles.td, { width: 100 }]}>
+                  <Text style={styles.tdText}>{z.baselineKWh} kWh</Text>
+                </View>
+                <View style={[styles.td, { width: 100 }]}>
+                  <Text style={[styles.tdText, { fontWeight: '700', color: Theme.colors.green }]}>
+                    {z.variantKWh} kWh
+                  </Text>
+                </View>
+                <View style={[styles.td, { width: 90 }]}>
+                  <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.forest }]}>
+                    {z.savedKWh > 0 ? `-${z.savedKWh} kWh` : '0 kWh'}
+                  </Text>
+                </View>
+              </View>
+            ))}
 
-        {/* Wiersz sumaryczny */}
-        <View style={[styles.tableRow, styles.summaryRow]}>
-          <View style={[styles.td, { flex: 1.5 }]}>
-            <Text style={[styles.zoneNameText, { fontWeight: '800' }]}>SUMA ŁĄCZNA</Text>
+            {/* Wiersz sumaryczny */}
+            <View style={[styles.tableRow, styles.summaryRow]}>
+              <View style={[styles.td, { flex: 1.5 }]}>
+                <Text style={[styles.zoneNameText, { fontWeight: '800' }]}>SUMA ŁĄCZNA</Text>
+              </View>
+              <View style={[styles.td, { width: 80 }]}>
+                <Text style={styles.tdText}>-</Text>
+              </View>
+              <View style={[styles.td, { width: 90 }]}>
+                <Text style={[styles.tdText, { fontWeight: '800' }]}>{energySummary.baselineHours} h</Text>
+              </View>
+              <View style={[styles.td, { width: 90 }]}>
+                <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.green }]}>
+                  {energySummary.variantHours} h
+                </Text>
+              </View>
+              <View style={[styles.td, { width: 100 }]}>
+                <Text style={[styles.tdText, { fontWeight: '800' }]}>{energySummary.baselineKWh} kWh</Text>
+              </View>
+              <View style={[styles.td, { width: 100 }]}>
+                <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.green }]}>
+                  {energySummary.variantKWh} kWh
+                </Text>
+              </View>
+              <View style={[styles.td, { width: 90 }]}>
+                <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.forest }]}>
+                  -{energySummary.savedKWh} kWh
+                </Text>
+              </View>
+            </View>
           </View>
-          <View style={[styles.td, { width: 80 }]}>
-            <Text style={styles.tdText}>-</Text>
-          </View>
-          <View style={[styles.td, { width: 90 }]}>
-            <Text style={[styles.tdText, { fontWeight: '800' }]}>{energySummary.baselineHours} h</Text>
-          </View>
-          <View style={[styles.td, { width: 90 }]}>
-            <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.green }]}>
-              {energySummary.variantHours} h
-            </Text>
-          </View>
-          <View style={[styles.td, { width: 100 }]}>
-            <Text style={[styles.tdText, { fontWeight: '800' }]}>{energySummary.baselineKWh} kWh</Text>
-          </View>
-          <View style={[styles.td, { width: 100 }]}>
-            <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.green }]}>
-              {energySummary.variantKWh} kWh
-            </Text>
-          </View>
-          <View style={[styles.td, { width: 90 }]}>
-            <Text style={[styles.tdText, { fontWeight: '800', color: Theme.colors.forest }]}>
-              -{energySummary.savedKWh} kWh
-            </Text>
-          </View>
-        </View>
+        </ScrollView>
       </View>
 
       {/* Modal eksportu raportu do CSV */}
@@ -251,14 +255,17 @@ const styles = StyleSheet.create({
   },
   methodologyHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    alignItems: 'flex-start',
+    gap: 10,
     marginBottom: 8,
   },
   methodologyTitle: {
     fontSize: 15,
     fontWeight: '700',
     color: Theme.colors.forest,
+    flex: 1,
+    flexShrink: 1,
+    lineHeight: 22,
   },
   methodologyText: {
     fontSize: 13,
@@ -272,14 +279,17 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: Theme.colors.warningBg,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: Theme.radii.sm,
     alignSelf: 'flex-start',
+    maxWidth: '100%',
   },
   meterStatusText: {
     fontSize: 12,
     fontWeight: '600',
     color: Theme.colors.warningText,
+    flexShrink: 1,
+    lineHeight: 18,
   },
   kpiRow: {
     flexDirection: 'row',
@@ -430,7 +440,9 @@ const styles = StyleSheet.create({
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: 12,
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 14,
   },
 });
 

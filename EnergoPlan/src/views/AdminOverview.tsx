@@ -103,7 +103,7 @@ export const AdminOverview: React.FC = () => {
           <View style={styles.changeProposals}>
             <View style={styles.proposalItem}>
               <Text style={styles.proposalSubject}>Język angielski</Text>
-              <View style={styles.shiftPill}>
+              <View style={styles.shiftRow}>
                 <Text style={styles.shiftText}>B201 ➔ A102</Text>
               </View>
               <Text style={styles.proposalTime}>16:00–17:30 • 12 osób • Ekran multimedialny</Text>
@@ -111,7 +111,7 @@ export const AdminOverview: React.FC = () => {
 
             <View style={styles.proposalItem}>
               <Text style={styles.proposalSubject}>Samorząd uczniowski</Text>
-              <View style={styles.shiftPill}>
+              <View style={styles.shiftRow}>
                 <Text style={styles.shiftText}>C301 ➔ A102</Text>
               </View>
               <Text style={styles.proposalTime}>18:00–19:30 • 10 osób • Standardowa</Text>
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    minWidth: 320,
+    minWidth: 280,
     backgroundColor: Theme.colors.surface,
     borderRadius: Theme.radii.lg,
     padding: Theme.spacing.lg,
@@ -251,6 +251,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    flexWrap: 'wrap',
+    gap: 8,
   },
   cardTitle: {
     fontSize: 18,
@@ -279,9 +281,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F9F7',
     borderWidth: 1,
     borderColor: Theme.colors.borderLight,
+    flexWrap: 'wrap',
+    gap: 10,
   },
   eventInfo: {
     flex: 1,
+    minWidth: 160,
   },
   eventSubject: {
     fontSize: 15,
@@ -330,20 +335,19 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   proposalItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     padding: 12,
     backgroundColor: '#FDFBF7',
     borderRadius: Theme.radii.md,
     borderWidth: 1,
     borderColor: '#F3EBDD',
+    width: '100%',
   },
   proposalInfo: {
     flex: 1,
   },
   proposalSubject: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
     color: Theme.colors.text,
   },
@@ -352,7 +356,7 @@ const styles = StyleSheet.create({
     color: Theme.colors.muted,
     marginTop: 2,
   },
-  shiftPill: {
+  shiftRow: {
     marginVertical: 4,
   },
   shiftText: {

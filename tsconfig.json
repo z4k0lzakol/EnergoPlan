@@ -1,0 +1,18 @@
+{
+  "extends": "./EnergoPlan/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./EnergoPlan/node_modules/*"]
+    },
+    "typeRoots": [
+      "./EnergoPlan/node_modules/@types"
+    ]
+  },
+  "include": [
+    "App.tsx",
+    "EnergoPlan/src/**/*"
+  ]
+}
+

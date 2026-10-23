@@ -114,7 +114,7 @@ export const TeacherNewRequest: React.FC = () => {
         </View>
 
         <View style={styles.timeRow}>
-          <View style={[styles.formGroup, { flex: 1 }]}>
+          <View style={[styles.formGroup, { flex: 1, minWidth: 120 }]}>
             <Text style={styles.label}>Godzina rozpoczęcia *</Text>
             <TextInput
               value={startTime}
@@ -123,7 +123,7 @@ export const TeacherNewRequest: React.FC = () => {
               style={styles.input}
             />
           </View>
-          <View style={[styles.formGroup, { flex: 1 }]}>
+          <View style={[styles.formGroup, { flex: 1, minWidth: 120 }]}>
             <Text style={styles.label}>Godzina zakończenia *</Text>
             <TextInput
               value={endTime}
@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
   timeRow: {
     flexDirection: 'row',
     gap: 12,
+    flexWrap: 'wrap',
   },
   label: {
     fontSize: 13,

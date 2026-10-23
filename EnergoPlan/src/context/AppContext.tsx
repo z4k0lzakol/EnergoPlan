@@ -72,7 +72,11 @@ interface AppContextType {
   rejectRequest: (requestId: string, reason: string) => void;
   acknowledgeChangeNotice: (noticeId: string) => void;
   updateZoneParams: (zoneId: string, powerKw: number, bufferMinutes: number) => void;
-  addRoom: (room: Omit<Room, 'id'>) => void;
+  addZone: (zone: Omit<EnergyZone, 'id'>) => void;
+  deleteZone: (zoneId: string) => void;
+  addRoom: (room: Omit<Room, 'id'> & { id?: string }) => void;
+  updateRoom: (roomId: string, updatedData: Partial<Room>) => void;
+  deleteRoom: (roomId: string) => void;
   resetToDemoData: () => void;
 }
 
@@ -306,13 +310,47 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     );
   };
 
+  // Dodawanie nowej strefy energetycznej
+  const addZone = (newZoneData: Omit<EnergyZone, 'id'>) => {
+    const nextChar = String.fromCharCode(65 + zones.length);
+    const newZone: EnergyZone = {
+      ...newZoneData,
+      id: `zone-${nextChar}`,
+    };
+    setZones((prev) => [...prev, newZone]);
+  };
+
+  // Usuwanie strefy
+  const deleteZone = (zoneId: string) => {
+    setZones((prev) => prev.filter((z) => z.id !== zoneId));
+    // Przenieś ewentualne sale do pierwszej dostępnej strefy
+    const fallbackZoneId = zones.find((z) => z.id !== zoneId)?.id || 'zone-A';
+    setRooms((prev) =>
+      prev.map((r) => (r.zoneId === zoneId ? { ...r, zoneId: fallbackZoneId } : r))
+    );
+  };
+
   // Dodawanie nowej sali
-  const addRoom = (newRoomData: Omit<Room, 'id'>) => {
+  const addRoom = (newRoomData: Omit<Room, 'id'> & { id?: string }) => {
+    const defaultPrefix = newRoomData.floor === 'Parter' ? 'A' : newRoomData.floor === 'I Piętro' ? 'B' : 'C';
+    const defaultId = `${defaultPrefix}${Math.floor(100 + Math.random() * 899)}`;
     const newRoom: Room = {
       ...newRoomData,
-      id: `${newRoomData.floor === 'Parter' ? 'A' : newRoomData.floor === 'I Piętro' ? 'B' : 'C'}${Math.floor(100 + Math.random() * 899)}`,
+      id: newRoomData.id?.trim() || defaultId,
     };
     setRooms((prev) => [...prev, newRoom]);
+  };
+
+  // Usuwanie sali
+  const deleteRoom = (roomId: string) => {
+    setRooms((prev) => prev.filter((r) => r.id !== roomId));
+  };
+
+  // Aktualizacja danych sali (asortyment/wyposażenie, piętro, strefa, pojemność itp.)
+  const updateRoom = (roomId: string, updatedData: Partial<Room>) => {
+    setRooms((prev) =>
+      prev.map((r) => (r.id === roomId ? { ...r, ...updatedData } : r))
+    );
   };
 
   // Przywrócenie danych demonstracyjnych
@@ -353,7 +391,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         rejectRequest,
         acknowledgeChangeNotice,
         updateZoneParams,
+        addZone,
+        deleteZone,
         addRoom,
+        updateRoom,
+        deleteRoom,
         resetToDemoData,
       }}
     >

@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#E8CA8C',
     marginBottom: 20,
+    flexWrap: 'wrap',
   },
   warningIconBox: {
     width: 38,
@@ -347,6 +348,7 @@ const styles = StyleSheet.create({
     borderRadius: Theme.radii.md,
     backgroundColor: '#F9FAF9',
     gap: 12,
+    flexWrap: 'wrap',
   },
   upcomingTimeCol: {
     alignItems: 'center',
@@ -367,6 +369,7 @@ const styles = StyleSheet.create({
   },
   upcomingInfo: {
     flex: 1,
+    minWidth: 140,
   },
   upcomingSubject: {
     fontSize: 14,
@@ -383,6 +386,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: Theme.radii.sm,
+    alignSelf: 'flex-start',
   },
   upcomingStatusText: {
     fontSize: 10,
